@@ -47,6 +47,8 @@ class AlunoController extends Aluno {
         try {
             // Desestruturando objeto recebido pelo front-end
             const dadosRecebidos: AlunoDTO = req.body;
+
+            console.log(dadosRecebidos);
             
             // Instanciando objeto Aluno
             const novoAluno = new Aluno(
