@@ -1,0 +1,287 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "version": "v1.0.0",
+      "title": "Biblioteca",
+      "description": "Implementação do Swagger à API"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3333",
+        "description": ""
+      }
+    ],
+    "paths": {
+      "/lista/alunos": {
+        "get": {
+          "tags": ["Alunos"],
+          "description": "Essa rota retorna a lista de alunos",
+          "responses": {
+            "200": { "description": "lista retornada com sucesso" },
+            "400": { "description": "Erro ao recuperar as informações do Aluno" }
+          }
+        }
+      },
+      "/novo/aluno": {
+        "post": {
+          "tags": ["Alunos"],
+          "summary": "Cadastrar novo aluno",
+          "description": "Esta rota recebe informações de um aluno para cadastrar no banco de dados.",
+          "operationId": "cadastrarAluno",
+          "security": [{ "apiKeyAuth": [] }],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nome": { "type": "string", "example": "Samuel" },
+                    "sobrenome": { "type": "string", "example": "Viana" },
+                    "dataNascimento": { "type": "string", "format": "date", "example": "1995-01-26" },
+                    "endereco": { "type": "string", "example": "Parque Leblon, 478" },
+                    "email": { "type": "string", "format": "email", "example": "samuel.caua.viana@facebook.com" },
+                    "celular": { "type": "string", "example": "85996712239" }
+                  },
+                  "required": ["nome", "sobrenome", "dataNascimento", "endereco", "email", "celular"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Aluno cadastrado com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "mensagem": { "type": "string", "example": "Aluno cadastrado com sucesso" }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Não foi possível cadastrar o aluno",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "erro": { "type": "string", "example": "Dados inválidos ou incompletos" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/remove/aluno/{id}": {
+        "put": {
+          "tags": ["Alunos"],
+          "summary": "Remove um aluno",
+          "description": "Remove um aluno do sistema usando o ID fornecido na URL.",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID do aluno a ser removido",
+              "required": true,
+              "schema": { "type": "integer", "example": 123 }
+            }
+          ],
+          "responses": {
+            "200": { "description": "Aluno removido com sucesso" },
+            "400": { "description": "ID inválido ou aluno não encontrado" },
+            "401": { "description": "Erro de autenticação ou permissão" },
+            "500": { "description": "Erro interno no servidor" }
+          }
+        }
+      },
+      "/atualiza/aluno/{id}": {
+        "put": {
+          "tags": ["Alunos"],
+          "summary": "Atualizar aluno",
+          "description": "Atualiza os dados de um aluno existente usando o ID fornecido na URL.",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID do aluno a ser atualizado",
+              "required": true,
+              "schema": { "type": "integer", "example": 1 }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nome": { "type": "string", "example": "Samuel" },
+                    "sobrenome": { "type": "string", "example": "Viana" },
+                    "dataNascimento": { "type": "string", "format": "date", "example": "1995-01-26" },
+                    "endereco": { "type": "string", "example": "Parque Leblon, 478" },
+                    "email": { "type": "string", "format": "email", "example": "samuel.caua.viana@facebook.com" },
+                    "celular": { "type": "string", "example": "85996712239" }
+                  },
+                  "required": ["nome", "sobrenome", "dataNascimento", "endereco", "email", "celular"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Aluno atualizado com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "mensagem": { "type": "string", "example": "Cadastro atualizado com sucesso!" }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Dados inválidos ou incompletos",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "erro": { "type": "string", "example": "Não foi possível atualizar o aluno no banco de dados" }
+                    }
+                  }
+                }
+              }
+            },
+            "404": { "description": "Aluno não encontrado" }
+          }
+        }
+      },
+      "/lista/livro": {
+        "get": {
+          "tags": ["Livros"],
+          "summary": "Lista todos os livros",
+          "description": "Retorna a lista de todos os livros cadastrados.",
+          "responses": {
+            "200": { "description": "Lista de livros retornada com sucesso" },
+            "400": { "description": "Erro ao recuperar as informações do Livro" }
+          }
+        }
+      },
+      "/novo/livro": {
+        "post": {
+          "tags": ["Livros"],
+          "summary": "Cadastrar novo livro",
+          "description": "Cadastra um novo livro com os dados informados e envia a imagem de capa via upload.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "titulo": { "type": "string", "example": "O Hobbit" },
+                    "autor": { "type": "string", "example": "J.R.R. Tolkien" },
+                    "editora": { "type": "string", "example": "Martins Fontes" },
+                    "anoPublicacao": { "type": "integer", "example": 1937 },
+                    "isbn": { "type": "string", "example": "9788578270698" },
+                    "quantTotal": { "type": "integer", "example": 3 },
+                    "quantDisponivel": { "type": "integer", "example": 3 },
+                    "valorAquisicao": { "type": "number", "example": 300 },
+                    "statusLivroEmprestado": { "type": "string", "example": "Disponível" },
+                    "imagemCapa": { "type": "string", "format": "binary" }
+                  },
+                  "required": ["titulo", "autor", "editora", "quantTotal", "quantDisponivel"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "Livro cadastrado com sucesso" },
+            "400": { "description": "Não foi possível cadastrar o livro no banco de dados" },
+            "500": { "description": "Erro ao cadastrar o livro" }
+          }
+        }
+      },
+      "/remove/livro": {
+        "put": {
+          "tags": ["Livros"],
+          "summary": "Remove um livro",
+          "description": "Remove um livro existente com base no ID passado por query string.",
+          "parameters": [
+            {
+              "name": "idLivro",
+              "in": "query",
+              "required": true,
+              "schema": { "type": "integer", "example": 5 },
+              "description": "ID do livro a ser removido"
+            }
+          ],
+          "responses": {
+            "200": { "description": "Livro removido com sucesso" },
+            "401": { "description": "Erro ao deletar livro" },
+            "500": { "description": "Erro interno ao remover o livro" }
+          }
+        }
+      },
+      "/atualiza/livro": {
+        "put": {
+          "tags": ["Livros"],
+          "summary": "Atualizar cadastro de livro",
+          "description": "Atualiza os dados de um livro com base no ID informado na query string.",
+          "parameters": [
+            {
+              "name": "idLivro",
+              "in": "query",
+              "required": true,
+              "schema": { "type": "integer", "example": 3 },
+              "description": "ID do livro a ser atualizado"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "titulo": { "type": "string", "example": "O Hobbit" },
+                    "autor": { "type": "string", "example": "J.R.R. Tolkien" },
+                    "editora": { "type": "string", "example": "Martins Fontes" },
+                    "anoPublicacao": { "type": "integer", "example": 1937 },
+                    "isbn": { "type": "string", "example": "9788578270698" },
+                    "quantTotal": { "type": "integer", "example": 5 },
+                    "quantDisponivel": { "type": "integer", "example": 5 },
+                    "valorAquisicao": { "type": "number", "example": 250 },
+                    "statusLivroEmprestado": { "type": "string", "example": "Disponível" }
+                  },
+                  "required": ["titulo", "autor", "editora", "quantTotal", "quantDisponivel"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "Cadastro atualizado com sucesso!" },
+            "400": { "description": "Não foi possível atualizar o livro no banco de dados" },
+            "500": { "description": "Erro ao atualizar aluno" }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer"
+        }
+      }
+    }
+  }
+  
